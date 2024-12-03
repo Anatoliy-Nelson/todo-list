@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
 //import {TodolistPropsType} from "./Todolist";
@@ -29,11 +29,17 @@ function App() {
     //UI
     return (
         <div className="App">
-            <Todolist title = {todolistTitle_1} tasks ={task_1}/>
-            <Todolist title = {todolistTitle_2} tasks ={task_2}/>
-            <Todolist title = {todolistTitle_3} tasks ={task_3}/>
+            <div className="todolist">
+                <Todolist title={todolistTitle_1} tasks={task_1}/>
+            </div>
+            <div className="todolist">
+                <Todolist title={todolistTitle_2} tasks={task_2}/>
+            </div>
+            <div className="todolist">
+                <Todolist title={todolistTitle_3} tasks={task_3}/>
+            </div>
         </div>
-    );
+    )
 }
 
 export default App;

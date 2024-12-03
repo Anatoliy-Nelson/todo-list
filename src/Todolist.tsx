@@ -1,8 +1,9 @@
 import {Task} from "./Task";
+import {Button} from "./Button";
 
 
 export type TodolistPropsType = {
-    title : string
+    title: string
     tasks: TaskType[]
 }
 
@@ -16,32 +17,28 @@ export const Todolist = ({title, tasks}: TodolistPropsType) => {
     const mapedTask = tasks.map((el: TaskType, index: number) => {
             //debugger
             return (
-                <Task key={el.id} title ={el.title} isDone={el.isDone}/>
-            )}
-        )
-
-
-
-//const taskList: Array<JSX.Element> = tasks.map(t => {
-//        <li>
-//            <input type="checkbox" checked={t.isDone}/>
-//            <span>{}</span></li>
-//    })
+                <Task key={el.id} title={el.title} isDone={el.isDone}/>
+            )
+        }
+    )
     return (
         <div>
             <h3>{title}</h3>
             <div>
                 <input/>
-                <button>+</button>
+                <Button title={'+'}/>
             </div>
-            <ul>
-                {mapedTask}
-            </ul>
+            {tasks.length === 0 ? (
+                <p> Тасок нет</p>
+            ) : (
+                <ul>
+                    {mapedTask}
+                </ul>
+            )}
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
-                <button>title={'Completed'}</button>
+                <Button title={'All'}/>
+                <Button title={'Active'}/>
+                <Button title={'Completed'}/>
             </div>
         </div>
     )
