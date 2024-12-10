@@ -1,11 +1,12 @@
 // @flow
 import * as React from 'react';
 
-type Props = {
+type ButtonPropsType = {
     title: string
+    onClickHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
-export const Button = ({title}: Props) => {
+export const Button = ({title, onClickHandler}: ButtonPropsType) => {
     return (
-        <button>{title}</button>
+        <button onClick={onClickHandler}>{title}</button>
     )
 }

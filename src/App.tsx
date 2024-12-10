@@ -1,43 +1,90 @@
-import React, {Fragment} from 'react';
+import React, {Fragment, useState} from 'react';
 import './App.css';
-import {Todolist} from "./Todolist";
-//import {TodolistPropsType} from "./Todolist";
+import {TaskType, Todolist} from "./Todolist";
 
+
+export type FilterValuesType = "all" | "active" | "completed"
+
+// React.state = [  #123
+//     { id: 1, title: "HTML&CSS", isDone: true },
+//     { id: 2, title: "JS/TS", isDone: true },
+//     { id: 3, title: "REACT", isDone: false },
+// ])
+
+// setNextTasks(nextState) #124
+
+// React.state === nextState => false
+
+// root.render(
+//  <App />
+//);
+// React.state = nextState
 
 function App() {
     //BLL
-    const todolistTitle_1 ="1"
-    const todolistTitle_2 ="2"
-    const todolistTitle_3 ="3"
+    const todolistTitle ="What to learn"
+    // const todolistTitle_2 ="2"
+    // const todolistTitle_3 ="3"
 
-    const task_1 = [
+    const [tasks, setTasks] = useState<Array<TaskType>>  ([
         {id: 1, title: "HTML&CSS", isDone: true},
         {id: 2, title: "JS", isDone: true},
-        {id: 3, title: "React", isDone: true}
-    ]
-    const task_2= [
-        {id: 4, title: "Hello World&CSS", isDone: true},
-        {id: 5, title: "I am Happy", isDone: true},
-        {id: 6, title: "Yo", isDone: true},
-]
-    const task_3= [
-        {id: 7, title: "HTML&CSS", isDone: true},
-        {id: 8, title: "JS", isDone: true},
-        {id: 9, title: "React", isDone: true},
-    ]
+        {id: 3, title: "React", isDone: false}
+    ])
+
+
+
+    const removeTask = (taskId: number) => { //2
+        const nextState: Array<TaskType> = tasks.filter(t => t.id !== taskId)
+        setTasks(nextState)
+        // console.log(tasks);
+
+//     const task_2= [
+//         {id: 4, title: "Hello World&CSS", isDone: true},
+//         {id: 5, title: "I am Happy", isDone: true},
+//         {id: 6, title: "Yo", isDone: true},
+// ]
+//     const task_3= [
+//         {id: 7, title: "HTML&CSS", isDone: true},
+//         {id: 8, title: "JS", isDone: true},
+//         {id: 9, title: "React", isDone: true},
+//     ]
+//     const removeTask =(taskId: number) => {
+//        tasks = tasks.filter(t => t.id !== taskId)
+    }
 
     //UI
+    const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all')
+
+    const changeTodolistFilter = (nextFilter: FilterValuesType) => {
+        setFilter(nextFilter)
+    }
+
+    let filteredTasks: Array<TaskType> = tasks
+    if( filter ==='active'){
+        filteredTasks = tasks.filter(t=> !t.isDone)
+    }
+    if( filter ==='completed') {
+        filteredTasks = tasks.filter(t => t.isDone)
+    }
+
+
     return (
         <div className="App">
-            <div className="todolist">
-                <Todolist title={todolistTitle_1} tasks={task_1}/>
-            </div>
-            <div className="todolist">
-                <Todolist title={todolistTitle_2} tasks={task_2}/>
-            </div>
-            <div className="todolist">
-                <Todolist title={todolistTitle_3} tasks={task_3}/>
-            </div>
+            {/*<div className="todolist">*/}
+                <Todolist
+                    title={todolistTitle}
+                    tasks={filteredTasks}
+                    removeTask={removeTask}
+                    changeTodolistFilter={changeTodolistFilter}
+                />
+            {/*</div>*/}
+            {/*<div className="todolist">*/}
+            {/*    <Todolist title={todolistTitle_2} tasks={task_2}/>*/}
+            {/*</div>*/}
+            {/*<div className="todolist">*/}
+            {/*    <Todolist title={todolistTitle_3} tasks={task_3}/>*/}
+            {/*</div>*/}
         </div>
     )
 }
