@@ -5,7 +5,7 @@ import {TodolistHeader} from "./TodolistHeader";
 import {FilterButtons} from "./FilterButtons";
 import {FilterValuesType} from "./App";
 import {AddForm} from "./AddForm";
-import {useRef, useState} from "react";
+import {ChangeEvent, useRef, useState, KeyboardEvent} from "react";
 
 
 export type TodolistPropsType = {
@@ -13,7 +13,7 @@ export type TodolistPropsType = {
     tasks: TaskType[]
     removeTask: (taskId: string) => void
     changeTodolistFilter: (nextFilter: FilterValuesType) => void
-    addTask: (title:string) => void
+    addTask: (title: string) => void
 }
 
 export type TaskType = {
@@ -26,7 +26,7 @@ export type TaskType = {
 export const Todolist = (props: TodolistPropsType) => {
 
     // const inputRef = useRef<HTMLInputElement>(null)
-    const[taskTitle, setTaskTitle] = useState("")
+    const [taskTitle, setTaskTitle] = useState("")
 
     // const mapedTask = tasks.map((el: TaskType, index: number) => {
     //         //debugger
@@ -53,10 +53,9 @@ export const Todolist = (props: TodolistPropsType) => {
         ? (
             <span>Your todolist is empty</span>
         )
-
         : (
             <ul>
-            {props.tasks.map(t => {
+                {props.tasks.map(t => {
                     return (
                         <li>
                             <Button title="x" onClickHandler={() => props.removeTask(t.id)}/>
@@ -65,26 +64,42 @@ export const Todolist = (props: TodolistPropsType) => {
                         </li>
                     )
                 })
-            }
-        </ul>
+                }
+            </ul>
         )
+
     const isAddTaskPossible = taskTitle.length <= 15
+
+    const addTaskHandler = () => {
+        props.addTask(taskTitle)
+        setTaskTitle("")
+    }
+
+    const setLocalTitleHandler = (element: ChangeEvent<HTMLInputElement>) => setTaskTitle(element.currentTarget.value)
+
+    const onKeyDownAddTaskHandler = (element: KeyboardEvent<HTMLInputElement>) => {
+        if ((taskTitle.length && isAddTaskPossible) && element.key === "Enter"){
+            addTaskHandler()
+        }
+    }
+
+
     return (
         <div className="todolist">
             <TodolistHeader title={props.title}/>
             <div>
-                <input value ={taskTitle} onChange={
-                    (element) => setTaskTitle(element.currentTarget.value)
-                }/>
+                <input
+                    value={taskTitle}
+                    onChange={setLocalTitleHandler}
+                    onKeyDown={onKeyDownAddTaskHandler}
+                />
                 {/*<input ref={inputRef}/>*/}
-                <Button title={"+"}
-                        onClickHandler={()=> {props.addTask(taskTitle)
-                        setTaskTitle("")
-                        }
-                }
-                //     if (inputRef.current) {
-                //         props.addTask(inputRef.current.value)}
-                // }}
+                <Button
+                    title={"+"}
+                    onClickHandler={addTaskHandler}
+                    //     if (inputRef.current) {
+                    //         props.addTask(inputRef.current.value)}
+                    // }}
                     isBtnDisabled={!taskTitle.length || !isAddTaskPossible}
                 />
 
