@@ -5,23 +5,29 @@ import {TodolistHeader} from "./TodolistHeader";
 import {FilterButtons} from "./FilterButtons";
 import {FilterValuesType} from "./App";
 import {AddForm} from "./AddForm";
+import {useRef, useState} from "react";
 
 
 export type TodolistPropsType = {
     title: string
     tasks: TaskType[]
-    removeTask: (taskId: number) => void
+    removeTask: (taskId: string) => void
     changeTodolistFilter: (nextFilter: FilterValuesType) => void
+    addTask: (title:string) => void
 }
 
 export type TaskType = {
-    id: number
+    id: string
     title: string
     isDone: boolean
 
 }
 
 export const Todolist = (props: TodolistPropsType) => {
+
+    // const inputRef = useRef<HTMLInputElement>(null)
+    const[taskTitle, setTaskTitle] = useState("")
+
     // const mapedTask = tasks.map((el: TaskType, index: number) => {
     //         //debugger
     //         return (
@@ -62,10 +68,30 @@ export const Todolist = (props: TodolistPropsType) => {
             }
         </ul>
         )
+    const isAddTaskPossible = taskTitle.length <= 15
     return (
         <div className="todolist">
             <TodolistHeader title={props.title}/>
-            <AddForm/>
+            <div>
+                <input value ={taskTitle} onChange={
+                    (element) => setTaskTitle(element.currentTarget.value)
+                }/>
+                {/*<input ref={inputRef}/>*/}
+                <Button title={"+"}
+                        onClickHandler={()=> {props.addTask(taskTitle)
+                        setTaskTitle("")
+                        }
+                }
+                //     if (inputRef.current) {
+                //         props.addTask(inputRef.current.value)}
+                // }}
+                    isBtnDisabled={!taskTitle.length || !isAddTaskPossible}
+                />
+
+            </div>
+            {!isAddTaskPossible && <div> Task title is too long</div>}
+            {!taskTitle.length && <div> Enter task title (15 chars)</div>}
+            {/*<AddForm/>*/}
             {tasksList}
             <FilterButtons changeTodolistFilter={props.changeTodolistFilter}/>
         </div>
